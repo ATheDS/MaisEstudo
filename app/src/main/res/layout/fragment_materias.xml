@@ -2,17 +2,90 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/gradient_blue_1"
-
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_blue_2"
     tools:context=".MateriasFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:gravity="center"
-
+    <LinearLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="MATERIAS" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/card"
+        android:padding="10dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/nomemateria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Matematica"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="2dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Professor:"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/nomeprofessor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mario C Filho"
+                android:textColor="@color/black"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:padding="2dp"
+
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:text="Atividades Feitas"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/atividadesfeitas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mario C Filho"
+                android:textColor="@color/black"
+                />
+
+
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/editarmaterias"
+            android:layout_width="wrap_content"
+            android:layout_gravity="end"
+
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/lightblue"
+            android:text="Editar"
+            android:textColor="@color/white" />
+
+
+
+
+
+
+
+
+    </LinearLayout>
 
 </FrameLayout>

@@ -1,12 +1,33 @@
 package com.example.maisestudo;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import java.util.List;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import java.util.ArrayList;
+
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+
+import com.example.maisestudo.LoginActivity;
+import com.example.maisestudo.R;
+import com.example.maisestudo.Users;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +44,11 @@ public class PerfilFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    public ImageButton editar;
+    public TextView emailtext,nometext,cursotext,turnotext;
+    public Users users;
+    private List AdmList;
+
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -53,12 +79,91 @@ public class PerfilFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Bundle bundle = getActivity().getIntent().getExtras();
+        if (bundle != null) {
+
+
+            AdmList = (List) bundle.get("aList");
+
+        }
+
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view  = inflater.inflate(R.layout.fragment_perfil, container, false);
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+
+
+
+
+
+        emailtext = view.findViewById(R.id.emailtextview);
+        nometext = view.findViewById(R.id.nometextview);
+        turnotext = view.findViewById(R.id.turnotextview);
+        cursotext = view.findViewById(R.id.cursostextview);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference documentReference = db.collection("usuarios").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                if(documentSnapshot !=null){
+
+                    String nome = documentSnapshot.getString("nome");
+                    String turno = documentSnapshot.getString("turno");
+                    String cursos = documentSnapshot.getString("curso");
+                    String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+                    if(AdmList.contains(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                        Log.d("tag","Contem");
+
+                    }
+
+                    nometext.setText(nome);
+                    cursotext.setText(cursos);
+                    turnotext.setText(turno);
+
+                    users = new Users();
+                    users.setName(nome);
+                    users.setEmail(email);
+                    users.setTurno(turno);
+                    if(cursos != null){
+                        users.setCursos(Integer.parseInt(cursos));
+                    }
+
+                }
+            }
+        });
+
+        emailtext.setText(email);
+
+        editar = view.findViewById(R.id.editar);
+        editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), EditarActivity.class);
+                intent.putExtra("users", users);
+                startActivity(intent);
+            }
+        });
+
+
+        Button deslogar = view.findViewById(R.id.deslogar);
+        deslogar.setOnClickListener(view2 -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            getActivity().finish();
+
+            startActivity(intent);
+
+        });
+
+        return view;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.maisestudo;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,8 @@ public class MateriasFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private List AdmList;
 
     public MateriasFragment() {
         // Required empty public constructor
@@ -58,7 +67,45 @@ public class MateriasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_materias, container, false);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+        View view  = inflater.inflate(R.layout.fragment_materias, container, false);
+        Bundle bundle = getActivity().getIntent().getExtras();
+        if (bundle != null) {
+
+
+            AdmList = (List) bundle.get("aList");
+        }
+        Button editarm = view.findViewById(R.id.editarmaterias);
+        if(!AdmList.contains(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+            editarm.setVisibility(View.GONE);
+
+        }
+
+
+        editarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(),EditarMateriasActivity.class);
+                startActivity(intent);
+
+
+            }
+
+
+
+
+        });
+
+
+
+
+
+
+
         // Inflate the layout for this fragment
         return view;
     }

@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
     TabLayout tabLayout;
@@ -23,9 +24,13 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Objects.requireNonNull(getSupportActionBar()).hide();
+
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
+
         ArrayList<String> arrayList = new ArrayList<>();
+
         arrayList.add("Tab 1");
         arrayList.add("Tab 2");
         arrayList.add("Tab 3");
@@ -37,11 +42,15 @@ public class HomeActivity extends AppCompatActivity {
 
     private void prepareViewPager(ViewPager viewPager, ArrayList<String> arrayList) {
         MainAdapter adapter = new MainAdapter(getSupportFragmentManager());
-        MateriasFragment fragment = new MateriasFragment();
-        for(int i = 0;   i<arrayList.size() ; i++){
-            adapter.addFragment(fragment,arrayList.get(i));
-            fragment = new MateriasFragment();
-        }
+        MateriasFragment mfragment = new MateriasFragment();
+
+        AgendaFragment afragment = new AgendaFragment();
+        PerfilFragment pfragment = new PerfilFragment();
+
+        adapter.addFragment(mfragment,"Materias");
+        adapter.addFragment(afragment,"Agenda");
+        adapter.addFragment(pfragment,"Perfil");
+
         viewPager.setAdapter(adapter);
 
     }
@@ -53,7 +62,6 @@ public class HomeActivity extends AppCompatActivity {
         public void addFragment(Fragment fragment,String title){
             arrayList.add(title);
             fragmentList.add(fragment);
-
         }
 
         public MainAdapter(@NonNull FragmentManager fm) {
